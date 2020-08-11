@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import account.dto.member;
+import account.service.accountService;
+import account.service.impl.accountServiceImpl;
 
 /*
  * account 관련 파일을 실행시키기 위한 컨트롤러
@@ -25,13 +28,14 @@ public class AccountController {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	private accountService s;
+	
 	// 메인 화면, 로그인 화면
-	@RequestMapping(value = {"/", "/Login"})
+	@RequestMapping(value = {"/", "/Login"} , method = RequestMethod.GET)
 	public String login(Model model) {
 		System.out.println("Login 컨트롤러 실행됨");
 		
-		member m = new member();
-		sqlSession.insert("test.show", m);
+		member m = sqlSession.selectOne("test.show");
 		System.out.println("test.show 실행됨"+m.getId());
 		
 		return "account/Login";
